@@ -9,12 +9,13 @@ import java.sql.Statement;
 
 import org.springframework.stereotype.Repository;
 
+import kr.co.itcen.mysite.exception.UserDaoException;
 import kr.co.itcen.mysite.vo.UserVo;
 
 @Repository
 public class UserDao {
 	
-	public Boolean insert(UserVo vo) {
+	public Boolean insert(UserVo vo) throws UserDaoException{
 		Boolean result = false;
 		
 		Connection connection = null;
@@ -26,7 +27,7 @@ public class UserDao {
 		try {
 			connection = getConnection();
 			
-			String sql = "insert into user values(null, ?, ?, ?, ?, now())";
+			String sql = "inser into user values(null, ?, ?, ?, ?, now())";
 			pstmt = connection.prepareStatement(sql);
 			pstmt.setString(1, vo.getName());
 			pstmt.setString(2, vo.getEmail());
@@ -43,7 +44,7 @@ public class UserDao {
 			}
 			
 		} catch (SQLException e) {
-			System.out.println("error:" + e);
+			throw new UserDaoException(e.getMessage());
 		} finally {
 			try {
 				if(rs != null) {
