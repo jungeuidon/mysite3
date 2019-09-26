@@ -43,12 +43,14 @@ public class UserController {
 	}
 
 	@RequestMapping(value="/login", method=RequestMethod.POST)
-	public String login(UserVo vo, HttpSession session, Model model) {
+	public String login(@ModelAttribute UserVo vo, HttpSession session, Model model) {
+		
 		UserVo userVo = userService.getUser(vo);
 		if(userVo == null) {
 			model.addAttribute("result", "fail");
 			return "user/login";
 		}
+		
 		// 로그인 처리
 		session.setAttribute("authUser", userVo);
 		return "redirect:/";
@@ -66,9 +68,31 @@ public class UserController {
 		return "redirect:/";
 	}
 	
+	@RequestMapping(value="/update", method=RequestMethod.GET)
+	public String update(HttpSession session) {
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		System.out.println(authUser.getEmail());
+		
+		return "user/update";
+	}
+	
+	@RequestMapping(value="/update", method=RequestMethod.POST)
+	public String update(HttpSession session, @ModelAttribute UserVo vo) {
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		
+		//접근 제어
+		if(authUser == null) {
+			return "redirect:/";
+		}
+		
+		vo.setNo(authUser.getNo());
+		userService.update(vo); 
+		session.setAttribute("authUser", vo);
+		return "redirect:/";
+	}
+	
 //	@ExceptionHandler(UserDaoException.class)
 //	public String handlerException() {
 //		return "error/exception";
 //	}
-	
 }

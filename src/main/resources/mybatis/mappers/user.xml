@@ -18,10 +18,7 @@
 	
 	<select id="getByEmailAndPassword1" parameterType="uservo" resultType="uservo">
 		<![CDATA[
-		select no, name 
-		  from user
-		 where email = #{email }
-		   and password = #{password }		
+		select no, name, email, gender from user where email = #{email } and password = #{password }		
 		]]>
 	</select>
 
@@ -44,8 +41,7 @@
 	
 	<update id="update" parameterType="uservo">
 		<![CDATA[
-        update user
-           set name = #{name },
+        update user set name = #{name },
         ]]>            
         <if test=" password != '' ">   
 			<![CDATA[
