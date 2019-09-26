@@ -20,6 +20,7 @@ public class UserDao {
 	
 	public Boolean insert(UserVo vo) throws UserDaoException{
 		int count = sqlSession.insert("user.insert", vo);
+		System.out.println(vo);
 		return count == 1;		
 	}
 	
