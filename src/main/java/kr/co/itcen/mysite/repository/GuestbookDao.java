@@ -24,43 +24,11 @@ public class GuestbookDao {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	@Autowired
-	private DataSource dataSource;
 	
-	public void delete(GuestbookVo vo) {
-		Connection connection = null;
-		PreparedStatement pstmt = null;
-		
-		try {
-			connection = dataSource.getConnection();
-			
-			String sql =
-				" delete" +
-				"   from guestbook" +
-				"  where no = ?" +
-				"    and password= ?";
-			
-			pstmt = connection.prepareStatement(sql);
-			pstmt.setLong(1, vo.getNo());
-			pstmt.setString(2, vo.getPassword());
-			
-			pstmt.executeUpdate();
-			
-		} catch (SQLException e) {
-			System.out.println("error:" + e);
-		} finally {
-			try {
-				if(pstmt != null) {
-					pstmt.close();
-				}
-				if(connection != null) {
-					connection.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}		
-	}	
+	public Boolean delete(GuestbookVo vo) {
+		int count = sqlSession.delete("guestbook.delete", vo);
+		return count == 1;	
+	}
 	
 	public Boolean insert(GuestbookVo vo) {
 			int count = sqlSession.insert("guestbook.insert", vo);

@@ -38,4 +38,10 @@
 		]]>
 	</select>
 	
+	<delete id="delete" parameterType="guestbookvo">
+		<![CDATA[
+		delete from guestbook where no = #{no} and password= #{password}
+		]]>
+	</delete>
+	
 </mapper>
